@@ -6,7 +6,7 @@ import csv
 column_headers = ["Pick_Number", "Team", "Player", "Position", "College"]
 
 # Create a new CSV file
-filename = "data_files/new_player_info.csv"
+filename = "../data_files/new_player_info.csv"
 with open(filename, "w", newline="") as csvfile:
     writer = csv.writer(csvfile)
     writer.writerow(column_headers)
