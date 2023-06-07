@@ -22,4 +22,7 @@
 /data_files/pfref_data_final.csv
 /data_files/pfref_fantasy_ts_a.csv
 /data_files/proxies_info.txt
-
+/venv/
+/venv/bin
+/venv/lib
+/venv/pyvenv.cfg
