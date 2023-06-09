@@ -25,3 +25,6 @@
 /venv/bin
 /venv/lib
 /venv/pyvenv.cfg
+/data_files/fantasy_extended.csv
+/data_files/protocol.md
+/scraping_scripts/successful_proxies.txt

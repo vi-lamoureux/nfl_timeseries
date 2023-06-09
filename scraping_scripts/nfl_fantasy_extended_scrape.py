@@ -25,15 +25,18 @@ def fetch_proxies():
     proxy_url = 'https://www.proxyscan.io/api/proxy?format=json&type=http&ping=800&level=elite&limit=20'
     proxy_response = requests.get(proxy_url)
     data = json.loads(proxy_response.text)
-    return [{'http': f"http://{item['Ip']}:{item['Port']}", 'https': f"http://{item['Ip']}:{item['Port']}"} for item in data]
+    return [{'http': f"http://{item['Ip']}:{item['Port']}", 'https': f"http://{item['Ip']}:{item['Port']}"} for item in
+            data]
 
+# Create a set to store successful proxies
+successful_proxies = set()
 
 # Fetch the initial list of proxies
 proxies = fetch_proxies()
 
 # Create a list of link suffixes to append to the URL
 link_suffixes = []
-with open('linksuff_a_fantasy.txt', 'r') as file:
+with open('linksuff_b_fantasy.txt', 'r') as file:
     for line in file:
         link_suffix = line.strip()
         link_suffixes.append(link_suffix)
@@ -381,13 +384,15 @@ for link_suffix in link_suffixes:
                     fdpt = row.find_all("td")[32].text.strip()
 
                 # Specify the file name
-                filename = '/Users/virginialamoureux/PycharmProjects/nfl_timeseries/data_files/fantasy_extended.csv'
+                filename = '/Users/virginialamoureux/PycharmProjects/nfl_timeseries/data_files/test_output.csv'
 
                 # Write the data to the CSV file
                 with open(filename, 'a', newline='') as csvfile:
                     writer = csv.writer(csvfile)
                     writer.writerow([
                         name,
+                        pos,
+                        link_suffix,
                         year,
                         team,
                         games,
@@ -429,5 +434,12 @@ for link_suffix in link_suffixes:
             if success:
                 progress_bar.update(1)  # Increment progress bar
 
+                # Record the successful proxy
+                successful_proxies.add(proxy['http'])  # Add the proxy to the set
+
         except requests.exceptions.RequestException as e:
             logging.error(e)
+
+# Save the successful proxies to a text file
+with open('successful_proxies.txt', 'w') as file:
+    file.writelines('\n'.join(successful_proxies))

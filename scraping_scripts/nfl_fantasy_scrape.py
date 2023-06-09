@@ -4,6 +4,7 @@ import csv
 from tqdm import tqdm
 from fake_useragent import UserAgent
 import random
+import json
 import logging
 import warnings
 import datetime
@@ -24,11 +25,11 @@ warnings.filterwarnings("ignore", category=UserWarning, module='bs4.dammit', mes
 
 # Function to fetch and parse the list of proxies
 def fetch_proxies():
-    proxy_url = 'https://api.proxyscrape.com/v2/?request=displayproxies&protocol=http&timeout=3000&country=all&ssl=all&anonymity=elite'
+    proxy_url = 'https://www.proxyscan.io/api/proxy?format=json&type=http&ping=800&level=elite&limit=20'
     proxy_response = requests.get(proxy_url)
-    lines = proxy_response.text.splitlines()
-    proxies_var = [{'http': f"http://{proxy_line}", 'https': f"http://{proxy_line}"} for proxy_line in lines]
-    return proxies_var
+    data = json.loads(proxy_response.text)
+    return [{'http': f"http://{item['Ip']}:{item['Port']}", 'https': f"http://{item['Ip']}:{item['Port']}"} for item in
+            data]
 
 
 # Fetch the initial list of proxies
@@ -107,7 +108,7 @@ for link_suffix in link_suffixes:
                         fantasy_rank_overall = row.find_all("td")[6].text.strip()
 
                         # Specify the file name
-                        filename = 'pfref_fantasy_ts_a.csv'
+                        filename = 'test_output.csv'
                         # Write the data to the CSV file
                         with open(filename, 'a', newline='') as csvfile:
                             writer = csv.writer(csvfile)
